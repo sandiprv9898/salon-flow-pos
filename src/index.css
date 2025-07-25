@@ -2,41 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Salon POS Design System - Professional salon-focused color palette */
 
 @layer base {
   :root {
+    /* Base colors */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
+    /* Card and surface colors */
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - Elegant purple for salon branding */
+    --primary: 280 60% 50%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 280 60% 65%;
+    --primary-dark: 280 60% 35%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Warm gold accent */
+    --secondary: 45 90% 60%;
+    --secondary-foreground: 222.2 84% 4.9%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Success - Fresh green */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Warning - Attention orange */
+    --warning: 25 95% 53%;
+    --warning-foreground: 0 0% 100%;
 
+    /* Muted tones */
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 8.9% 46.1%;
+
+    /* Accent - Soft pink for highlights */
+    --accent: 330 40% 85%;
+    --accent-foreground: 222.2 84% 4.9%;
+
+    /* Destructive - Clear red */
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Borders and inputs */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 280 60% 50%;
 
-    --radius: 0.5rem;
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(280 60% 50%), hsl(280 60% 35%));
+    --gradient-secondary: linear-gradient(135deg, hsl(45 90% 60%), hsl(25 95% 53%));
+    --gradient-hero: linear-gradient(135deg, hsl(280 60% 50%), hsl(330 40% 85%));
+
+    /* Shadows */
+    --shadow-elegant: 0 10px 30px -10px hsl(280 60% 50% / 0.3);
+    --shadow-soft: 0 4px 12px hsl(220 13% 91% / 0.5);
+
+    /* Spacing and radius */
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
