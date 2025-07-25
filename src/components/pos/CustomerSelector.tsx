@@ -54,7 +54,9 @@ const CustomerSelector = ({
         email: newCustomer.email || undefined,
         type: newCustomer.type,
         totalSpent: 0,
-        preferences: []
+        preferences: [],
+        loyaltyPoints: 0,
+        giftCardBalance: 0
       };
       
       onSelectCustomer(customer);

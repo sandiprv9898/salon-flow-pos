@@ -11,11 +11,12 @@ import {
   Package, Receipt, Settings, Search, Plus, Minus,
   Trash2, Calculator, CreditCard, Smartphone,
   Wallet, DollarSign, Percent, Tag, Clock,
-  CheckCircle, XCircle, UserCheck, TrendingUp
+  CheckCircle, XCircle, UserCheck, TrendingUp,
+  Coffee, AlertTriangle, Gift, Star
 } from "lucide-react";
 import { 
   mockProducts, mockServices, mockEmployees, mockCustomers, 
-  paymentMethods, mockOffers, type CartItem, type Product, 
+  paymentMethods, mockOffers, servicePackages, type CartItem, type Product, 
   type Service, type Customer, type Employee 
 } from "@/data/mockData";
 import CartComponent from "@/components/pos/CartComponent";
@@ -25,6 +26,9 @@ import CustomerSelector from "@/components/pos/CustomerSelector";
 import CheckoutModal from "@/components/pos/CheckoutModal";
 import AppointmentModal from "@/components/pos/AppointmentModal";
 import ReportsModal from "@/components/pos/ReportsModal";
+import StaffManagement from "@/components/pos/StaffManagement";
+import InventoryManagement from "@/components/pos/InventoryManagement";
+import WaitlistManager from "@/components/pos/WaitlistManager";
 
 const POS = () => {
   const navigate = useNavigate();
@@ -39,6 +43,9 @@ const POS = () => {
   const [showCheckout, setShowCheckout] = useState(false);
   const [showAppointments, setShowAppointments] = useState(false);
   const [showReports, setShowReports] = useState(false);
+  const [showStaffManagement, setShowStaffManagement] = useState(false);
+  const [showInventory, setShowInventory] = useState(false);
+  const [showWaitlist, setShowWaitlist] = useState(false);
   const [sessionData, setSessionData] = useState({
     startTime: new Date().toISOString(),
     totalSales: 0,
@@ -145,6 +152,18 @@ const POS = () => {
               <Clock className="w-4 h-4" />
               <span>Session: {new Date(sessionData.startTime).toLocaleTimeString()}</span>
             </div>
+            <Button variant="ghost" size="sm" onClick={() => setShowStaffManagement(true)}>
+              <Users className="w-4 h-4 mr-2" />
+              Staff
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => setShowInventory(true)}>
+              <Package className="w-4 h-4 mr-2" />
+              Inventory
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => setShowWaitlist(true)}>
+              <Clock className="w-4 h-4 mr-2" />
+              Waitlist
+            </Button>
             <Button variant="ghost" size="sm" onClick={() => setShowReports(true)}>
               <TrendingUp className="w-4 h-4 mr-2" />
               Reports
@@ -189,9 +208,9 @@ const POS = () => {
             </div>
           </div>
 
-          {/* Product/Service Tabs */}
+          {/* Product/Service/Package Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsList className="grid w-full grid-cols-3 mb-6">
               <TabsTrigger value="products" className="flex items-center gap-2">
                 <Package className="w-4 h-4" />
                 Products
@@ -199,6 +218,10 @@ const POS = () => {
               <TabsTrigger value="services" className="flex items-center gap-2">
                 <UserCheck className="w-4 h-4" />
                 Services
+              </TabsTrigger>
+              <TabsTrigger value="packages" className="flex items-center gap-2">
+                <Gift className="w-4 h-4" />
+                Packages
               </TabsTrigger>
             </TabsList>
 
@@ -215,6 +238,71 @@ const POS = () => {
                 employees={mockEmployees}
                 onAddToCart={(service) => addToCart(service, 'service')}
               />
+            </TabsContent>
+
+            <TabsContent value="packages">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {servicePackages.map((pkg) => (
+                  <Card key={pkg.id} className="hover:shadow-lg transition-shadow cursor-pointer border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-lg">{pkg.name}</CardTitle>
+                        <Badge variant="secondary" className="bg-green-100 text-green-800">
+                          Save ₹{pkg.originalPrice - pkg.packagePrice}
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground">{pkg.description}</p>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="space-y-1">
+                          {pkg.services.map((serviceId) => {
+                            const service = mockServices.find(s => s.id === serviceId);
+                            return service ? (
+                              <div key={serviceId} className="text-sm flex items-center gap-2">
+                                <CheckCircle className="w-3 h-3 text-green-600" />
+                                {service.name}
+                              </div>
+                            ) : null;
+                          })}
+                        </div>
+                        <div className="flex items-center justify-between pt-2 border-t">
+                          <div>
+                            <div className="text-sm text-muted-foreground line-through">₹{pkg.originalPrice}</div>
+                            <div className="text-lg font-bold text-primary">₹{pkg.packagePrice}</div>
+                            <div className="text-xs text-muted-foreground">{pkg.duration} mins</div>
+                          </div>
+                          <Button 
+                            onClick={() => {
+                              const packageItem: CartItem = {
+                                id: pkg.id,
+                                name: pkg.name,
+                                type: 'package',
+                                price: pkg.packagePrice,
+                                quantity: 1,
+                                duration: pkg.duration,
+                                packageContents: pkg.services.map(serviceId => {
+                                  const service = mockServices.find(s => s.id === serviceId);
+                                  return service?.name || '';
+                                }).filter(Boolean)
+                              };
+                              setCart([...cart, packageItem]);
+                              toast({
+                                title: "Package added to cart",
+                                description: `${pkg.name} added successfully`,
+                              });
+                            }}
+                            className="gap-2"
+                          >
+                            <Plus className="w-4 h-4" />
+                            Add Package
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </TabsContent>
           </Tabs>
         </div>
@@ -269,6 +357,21 @@ const POS = () => {
         open={showReports}
         onOpenChange={setShowReports}
         sessionData={sessionData}
+      />
+
+      <StaffManagement
+        open={showStaffManagement}
+        onOpenChange={setShowStaffManagement}
+      />
+
+      <InventoryManagement
+        open={showInventory}
+        onOpenChange={setShowInventory}
+      />
+
+      <WaitlistManager
+        open={showWaitlist}
+        onOpenChange={setShowWaitlist}
       />
     </div>
   );
