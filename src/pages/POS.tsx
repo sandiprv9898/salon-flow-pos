@@ -29,6 +29,7 @@ import ReportsModal from "@/components/pos/ReportsModal";
 import StaffManagement from "@/components/pos/StaffManagement";
 import InventoryManagement from "@/components/pos/InventoryManagement";
 import WaitlistManager from "@/components/pos/WaitlistManager";
+import AppointmentsSidebar from "@/components/pos/AppointmentsSidebar";
 
 const POS = () => {
   const navigate = useNavigate();
@@ -46,6 +47,7 @@ const POS = () => {
   const [showStaffManagement, setShowStaffManagement] = useState(false);
   const [showInventory, setShowInventory] = useState(false);
   const [showWaitlist, setShowWaitlist] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(true);
   const [sessionData, setSessionData] = useState({
     startTime: new Date().toISOString(),
     totalSales: 0,
@@ -134,49 +136,66 @@ const POS = () => {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-accent/10">
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b shadow-sm">
-        <div className="px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent">
-              Salon POS
-            </h1>
-            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
-              {user.role}
-            </Badge>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-accent/10 flex">
+      {/* Appointments Sidebar */}
+      {showSidebar && (
+        <AppointmentsSidebar 
+          employeeId={user.id}
+          employeeName={user.name}
+        />
+      )}
 
-          <div className="flex items-center space-x-4">
-            <div className="hidden md:flex items-center space-x-2 text-sm text-muted-foreground">
-              <Clock className="w-4 h-4" />
-              <span>Session: {new Date(sessionData.startTime).toLocaleTimeString()}</span>
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <header className="bg-white/80 backdrop-blur-sm border-b shadow-sm">
+          <div className="px-6 py-4 flex justify-between items-center">
+            <div className="flex items-center space-x-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowSidebar(!showSidebar)}
+                className="mr-2"
+              >
+                <Calendar className="w-4 h-4" />
+              </Button>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent">
+                Salon POS
+              </h1>
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+                {user.role}
+              </Badge>
             </div>
-            <Button variant="ghost" size="sm" onClick={() => setShowStaffManagement(true)}>
-              <Users className="w-4 h-4 mr-2" />
-              Staff
-            </Button>
-            <Button variant="ghost" size="sm" onClick={() => setShowInventory(true)}>
-              <Package className="w-4 h-4 mr-2" />
-              Inventory
-            </Button>
-            <Button variant="ghost" size="sm" onClick={() => setShowWaitlist(true)}>
-              <Clock className="w-4 h-4 mr-2" />
-              Waitlist
-            </Button>
-            <Button variant="ghost" size="sm" onClick={() => setShowReports(true)}>
-              <TrendingUp className="w-4 h-4 mr-2" />
-              Reports
-            </Button>
-            <Button variant="ghost" size="sm" onClick={handleLogout}>
-              <LogOut className="w-4 h-4 mr-2" />
-              Logout
-            </Button>
-          </div>
-        </div>
-      </header>
 
-      <div className="flex flex-1 h-[calc(100vh-80px)]">
+            <div className="flex items-center space-x-4">
+              <div className="hidden md:flex items-center space-x-2 text-sm text-muted-foreground">
+                <Clock className="w-4 h-4" />
+                <span>Session: {new Date(sessionData.startTime).toLocaleTimeString()}</span>
+              </div>
+              <Button variant="ghost" size="sm" onClick={() => setShowStaffManagement(true)}>
+                <Users className="w-4 h-4 mr-2" />
+                Staff
+              </Button>
+              <Button variant="ghost" size="sm" onClick={() => setShowInventory(true)}>
+                <Package className="w-4 h-4 mr-2" />
+                Inventory
+              </Button>
+              <Button variant="ghost" size="sm" onClick={() => setShowWaitlist(true)}>
+                <Clock className="w-4 h-4 mr-2" />
+                Waitlist
+              </Button>
+              <Button variant="ghost" size="sm" onClick={() => setShowReports(true)}>
+                <TrendingUp className="w-4 h-4 mr-2" />
+                Reports
+              </Button>
+              <Button variant="ghost" size="sm" onClick={handleLogout}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </Button>
+            </div>
+          </div>
+        </header>
+
+        <div className="flex flex-1 h-[calc(100vh-80px)]">
         {/* Main Content */}
         <div className="flex-1 p-6 overflow-auto">
           {/* Search and Customer Selection */}
@@ -321,6 +340,7 @@ const POS = () => {
           />
         </div>
       </div>
+    </div>
 
       {/* Modals */}
       <CheckoutModal

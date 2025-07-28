@@ -464,6 +464,65 @@ export const waitlistEntries = [
   }
 ];
 
+// Mock Appointments for today
+export const mockTodayAppointments = [
+  {
+    id: "apt1",
+    customerId: "c1",
+    serviceIds: ["s3"],
+    employeeId: "e2",
+    date: "2024-01-25",
+    time: "10:00",
+    duration: 120,
+    status: 'scheduled' as const,
+    notes: "First time coloring, allergic to sulfates"
+  },
+  {
+    id: "apt2",
+    customerId: "c2", 
+    serviceIds: ["s1"],
+    employeeId: "e1",
+    date: "2024-01-25",
+    time: "11:30",
+    duration: 45,
+    status: 'in-progress' as const,
+    notes: "Regular customer"
+  },
+  {
+    id: "apt3",
+    customerId: "c3",
+    serviceIds: ["s5"],
+    employeeId: "e3",
+    date: "2024-01-25", 
+    time: "14:00",
+    duration: 75,
+    status: 'scheduled' as const,
+    notes: "New customer, first facial"
+  },
+  {
+    id: "apt4",
+    customerId: "c4",
+    serviceIds: ["s7"],
+    employeeId: "e3",
+    date: "2024-01-25",
+    time: "15:30", 
+    duration: 45,
+    status: 'scheduled' as const,
+    notes: "Regular manicure appointment"
+  },
+  {
+    id: "apt5",
+    customerId: "c1",
+    serviceIds: ["s8"],
+    employeeId: "e4",
+    date: "2024-01-25",
+    time: "16:30",
+    duration: 60,
+    status: 'scheduled' as const,
+    notes: "VIP customer pedicure"
+  }
+];
+
 // Mock Payment Methods
 export const paymentMethods = [
   { id: "cash", name: "Cash", icon: "💵" },
