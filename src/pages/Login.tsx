@@ -15,9 +15,7 @@ const Login = () => {
 
   // Demo credentials
   const demoUsers = [
-    { username: "admin", password: "admin123", role: "Manager" },
-    { username: "stylist", password: "stylist123", role: "Stylist" },
-    { username: "cashier", password: "cashier123", role: "Cashier" }
+    { username: "admin", password: "admin123", role: "Manager" }
   ];
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -36,7 +34,13 @@ const Login = () => {
           title: "Login Successful",
           description: `Welcome back, ${user.role}!`,
         });
-        navigate("/pos");
+        
+        // Route based on role
+        if (user.role === "Manager") {
+          navigate("/admin");
+        } else {
+          navigate("/employee-login");
+        }
       } else {
         toast({
           title: "Login Failed",
@@ -114,12 +118,14 @@ const Login = () => {
 
             {/* Demo Credentials */}
             <div className="mt-6 p-4 bg-muted/50 rounded-lg">
-              <h4 className="text-sm font-medium mb-2">Demo Credentials:</h4>
+              <h4 className="text-sm font-medium mb-2">Admin Login:</h4>
               <div className="space-y-1 text-xs text-muted-foreground">
-                <div>Admin: admin / admin123</div>
-                <div>Stylist: stylist / stylist123</div>
-                <div>Cashier: cashier / cashier123</div>
+                <div>Username: admin</div>
+                <div>Password: admin123</div>
               </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                Admin will manage register and employee access
+              </p>
             </div>
           </CardContent>
         </Card>
