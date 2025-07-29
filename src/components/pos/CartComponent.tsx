@@ -85,6 +85,11 @@ const CartComponent = ({
                     <Badge variant="outline" className="text-xs">
                       {item.type}
                     </Badge>
+                    {item.employeeName && (
+                      <p className="text-xs text-primary font-medium">
+                        Assigned to: {item.employeeName}
+                      </p>
+                    )}
                     {item.duration && (
                       <p className="text-xs text-muted-foreground">
                         Duration: {item.duration} min

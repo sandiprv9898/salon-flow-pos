@@ -30,6 +30,7 @@ import StaffManagement from "@/components/pos/StaffManagement";
 import InventoryManagement from "@/components/pos/InventoryManagement";
 import WaitlistManager from "@/components/pos/WaitlistManager";
 import AppointmentsSidebar from "@/components/pos/AppointmentsSidebar";
+import EmployeeSelectionModal from "@/components/pos/EmployeeSelectionModal";
 
 const POS = () => {
   const navigate = useNavigate();
@@ -48,6 +49,8 @@ const POS = () => {
   const [showInventory, setShowInventory] = useState(false);
   const [showWaitlist, setShowWaitlist] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
+  const [showEmployeeSelection, setShowEmployeeSelection] = useState(false);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [sessionData, setSessionData] = useState({
     startTime: new Date().toISOString(),
     totalSales: 0,
@@ -71,9 +74,17 @@ const POS = () => {
   };
 
   const addToCart = (item: Product | Service, type: 'product' | 'service') => {
+    if (type === 'service') {
+      // For services, show employee selection modal first
+      setSelectedService(item as Service);
+      setShowEmployeeSelection(true);
+      return;
+    }
+
+    // For products, add directly to cart
     const existingItem = cart.find(cartItem => cartItem.id === item.id);
     
-    if (existingItem && type === 'product') {
+    if (existingItem) {
       setCart(cart.map(cartItem =>
         cartItem.id === item.id
           ? { ...cartItem, quantity: cartItem.quantity + 1 }
@@ -86,7 +97,7 @@ const POS = () => {
         type,
         price: item.price,
         quantity: 1,
-        duration: type === 'service' ? (item as Service).duration : undefined
+        duration: undefined
       };
       setCart([...cart, newItem]);
     }
@@ -94,6 +105,25 @@ const POS = () => {
     toast({
       title: "Added to cart",
       description: `${item.name} added successfully`,
+    });
+  };
+
+  const addServiceWithEmployee = (employee: Employee, service: Service) => {
+    const newItem: CartItem = {
+      id: `${service.id}-${employee.id}`,
+      name: service.name,
+      type: 'service',
+      price: service.price,
+      quantity: 1,
+      duration: service.duration,
+      employeeId: employee.id,
+      employeeName: employee.name
+    };
+    setCart([...cart, newItem]);
+    
+    toast({
+      title: "Service added to cart",
+      description: `${service.name} with ${employee.name}`,
     });
   };
 
@@ -392,6 +422,14 @@ const POS = () => {
       <WaitlistManager
         open={showWaitlist}
         onOpenChange={setShowWaitlist}
+      />
+
+      <EmployeeSelectionModal
+        open={showEmployeeSelection}
+        onOpenChange={setShowEmployeeSelection}
+        service={selectedService}
+        employees={mockEmployees}
+        onSelectEmployee={addServiceWithEmployee}
       />
     </div>
   );

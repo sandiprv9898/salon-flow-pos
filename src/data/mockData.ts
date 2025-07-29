@@ -41,6 +41,8 @@ export interface Employee {
   hoursWorked: number;
   todayEarnings: number;
   weeklyEarnings: number;
+  specialties: string[];
+  experienceYears: number;
 }
 
 export interface Customer {
@@ -72,6 +74,7 @@ export interface CartItem {
   discount?: number;
   discountType?: 'fixed' | 'percentage';
   employeeId?: string;
+  employeeName?: string;
   duration?: number;
   tip?: number;
   packageContents?: string[];
@@ -267,7 +270,9 @@ export const mockEmployees: Employee[] = [
     clockInTime: "09:00",
     hoursWorked: 6.5,
     todayEarnings: 2400,
-    weeklyEarnings: 12000
+    weeklyEarnings: 12000,
+    specialties: ["Hair", "Beauty"],
+    experienceYears: 8
   },
   {
     id: "e2",
@@ -281,7 +286,9 @@ export const mockEmployees: Employee[] = [
     clockInTime: "08:30",
     hoursWorked: 7,
     todayEarnings: 3200,
-    weeklyEarnings: 15800
+    weeklyEarnings: 15800,
+    specialties: ["Hair"],
+    experienceYears: 12
   },
   {
     id: "e3",
@@ -295,7 +302,9 @@ export const mockEmployees: Employee[] = [
     clockInTime: "09:15",
     hoursWorked: 6,
     todayEarnings: 1800,
-    weeklyEarnings: 9600
+    weeklyEarnings: 9600,
+    specialties: ["Skin", "Beauty", "Massage"],
+    experienceYears: 5
   },
   {
     id: "e4",
@@ -310,7 +319,9 @@ export const mockEmployees: Employee[] = [
     breakStartTime: "14:30",
     hoursWorked: 4.5,
     todayEarnings: 1200,
-    weeklyEarnings: 7200
+    weeklyEarnings: 7200,
+    specialties: ["Hair"],
+    experienceYears: 2
   }
 ];
 
